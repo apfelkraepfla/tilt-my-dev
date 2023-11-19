@@ -1,5 +1,5 @@
-allow_k8s_contexts('minikube')
+# -*- mode: Python -*-
 
-#docker_build('roukou/tilt-demo', '.')
-k8s_yaml('k8s-app.yml')
-k8s_resource('tilt-demo', port_forwards=42050)
+docker_build('tilt-my-dev', '.', dockerfile='deployments/Dockerfile')
+k8s_yaml('deployments/kubernetes.yaml')
+k8s_resource('example-go', port_forwards=3000)

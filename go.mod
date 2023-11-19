@@ -1,4 +1,4 @@
-module go-deployment-dashboard
+module github.com/apfelkraepfla/tilt-my-dev
 
 go 1.21.4
 
