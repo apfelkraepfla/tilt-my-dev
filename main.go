@@ -7,8 +7,10 @@ import (
 
 	//_ "github.com/apfelkraepfla/tilt-my-dev/docs"
 
+	_ "github.com/apfelkraepfla/tilt-my-dev/docs" // Import the generated docs file
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
+	// Import swag for swaggo annotations
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,5 +28,5 @@ func main() {
 	router.HandleFunc("/", indexHandler)
 	router.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)
 
-	log.Fatal(http.ListenAndServe(":" + port, router))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
