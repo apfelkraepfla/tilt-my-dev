@@ -1,23 +1,23 @@
-package main
+package server
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net"
 
 	pb "github.com/apfelkraepfla/tilt-my-def/protos/quotespb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type server struct {
 	pb.QuoteServiceServer
 }
 
-var (
-	port = flag.Int("port", 3000, "The server port")
-)
+type ServerConfig struct {
+	Port int
+}
 
 func (s *server) GetQuote(ctx context.Context, req *pb.QuoteRequest) (*pb.QuoteResponse, error) {
 	// Return a hardcoded philosophical quote
@@ -26,16 +26,18 @@ func (s *server) GetQuote(ctx context.Context, req *pb.QuoteRequest) (*pb.QuoteR
 	}, nil
 }
 
-func main() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+func StartServer(config ServerConfig) {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Port))
 	if err != nil {
-		log.Fatalf("Failed to listen at %v: %v", port, err)
+		log.Fatalf("Failed to listen at %v: %v", config.Port, err)
 	}
 
 	grpcServer := grpc.NewServer()
 	pb.RegisterQuoteServiceServer(grpcServer, &server{})
+	// Register reflection service on gRPC server.
+	reflection.Register(grpcServer)
 
-	log.Println("gRPC server is running on port 3000")
+	log.Printf("gRPC server is running on port %d", config.Port)
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
