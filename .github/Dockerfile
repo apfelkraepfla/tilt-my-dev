@@ -24,26 +24,26 @@ RUN wget "https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VS
     chmod +x ./node-debian.sh && \
     ./node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" vscode true && \
     rm common-debian.sh go-debian.sh 
-    # node-debian.share
+# node-debian.share
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        wget \
-        unzip \
-        openjdk-17-jre-headless \
-        bzip2 \
-        protobuf-compiler \
-        patch && \
+    wget \
+    unzip \
+    openjdk-17-jre-headless \
+    bzip2 \
+    protobuf-compiler \
+    patch && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
-    
+
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
-RUN go install google.golang.org/grpc/cmd/protoc-gen-go-gRPC@v1.2
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 
 # Install swagger-codegen
 ENV SWAGGER_CODEGEN_VERSION=2.4.8
 RUN wget https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/${SWAGGER_CODEGEN_VERSION}/swagger-codegen-cli-${SWAGGER_CODEGEN_VERSION}.jar \
     -O /usr/local/bin/swagger-codegen-cli.jar && \
     echo '#!/bin/bash\njava -jar /usr/local/bin/swagger-codegen-cli.jar "$@"' > /usr/local/bin/swagger-codegen && \
-	chmod +x /usr/local/bin/swagger-codegen
+    chmod +x /usr/local/bin/swagger-codegen
 
 # Install Bazelisk as bazel to manage Bazel
 RUN go install github.com/bazelbuild/bazelisk@latest && \
