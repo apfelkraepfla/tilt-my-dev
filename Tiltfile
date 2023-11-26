@@ -1,5 +1,6 @@
 # -*- mode: Python -*-
 
-docker_build('tilt-my-dev', '.', dockerfile='deployments/Dockerfile')
-k8s_yaml('deployments/kubernetes.yaml')
-k8s_resource('example-go', port_forwards=3000)
+docker_build('ghcr.io/apfelkraepfla/quotes-service', 
+    '../quotes-service')
+k8s_yaml('../quotes-service/deployments/kubernetes.yaml')
+k8s_resource('quotes-service', port_forwards=3000)
